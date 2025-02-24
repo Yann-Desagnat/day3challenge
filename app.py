@@ -4,12 +4,23 @@ import uvicorn
 import numpy as np
 import cv2
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+
 from fastapi.responses import Response
 from models.network_swinir import SwinIR as net
 from PIL import Image
 
 # Initialize FastAPI
 app = FastAPI()
+
+# Autoriser toutes les origines (pour tester)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Autorise toutes les origines (à restreindre en production)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Load SwinIR Model
 def load_model(model_path='001_classicalSR_DF2K_s64w8_SwinIR-M_x4.pth', scale=4):
